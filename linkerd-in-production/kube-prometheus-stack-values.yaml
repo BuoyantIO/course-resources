@@ -1,96 +1,110 @@
+# This file contains the values for the kube-prometheus-stack Helm chart.
+#
+# The prometheus: stanza contains the configuration for the Prometheus server.
+# Here we're using it to supply additional scrape configuration from a Secret.
 prometheus:
   prometheusSpec:
     additionalScrapeConfigsSecret:
-       enabled: true
-       name: additional-prometheus-scrape-configs
-       key: additional-prometheus-scrape-configs.yaml
+      enabled: true
+      key: additional-prometheus-scrape-configs.yaml
+      name: additional-prometheus-scrape-configs
 
+# The grafana: stanza contains additional configuration for Grafana. Here
+# we're using it to supply some preconfigured Linkerd dashboards.
 grafana:
-  dashboards:
-    linkerd:
-      # all these charts are hosted at https://grafana.com/grafana/dashboards/{id}
-      top-line:
-        gnetId: 15474
-        revision: 4
-        datasource: prometheus
-      health:
-        gnetId: 15486
-        revision: 3
-        datasource: prometheus
-      kubernetes:
-        gnetId: 15479
-        revision: 2
-        datasource: prometheus
-      namespace:
-        gnetId: 15478
-        revision: 3
-        datasource: prometheus
-      deployment:
-        gnetId: 15475
-        revision: 7
-        datasource: prometheus
-      pod:
-        gnetId: 15477
-        revision: 3
-        datasource: prometheus
-      service:
-        gnetId: 15480
-        revision: 3
-        datasource: prometheus
-      route:
-        gnetId: 15481
-        revision: 3
-        datasource: prometheus
-      authority:
-        gnetId: 15482
-        revision: 3
-        datasource: prometheus
-      cronjob:
-        gnetId: 15483
-        revision: 3
-        datasource: prometheus
-      job:
-        gnetId: 15487
-        revision: 3
-        datasource: prometheus
-      daemonset:
-        gnetId: 15484
-        revision: 3
-        datasource: prometheus
-      replicaset:
-        gnetId: 15491
-        revision: 3
-        datasource: prometheus
-      statefulset:
-        gnetId: 15493
-        revision: 3
-        datasource: prometheus
-      replicationcontroller:
-        gnetId: 15492
-        revision: 4
-        datasource: prometheus
-      prometheus:
-        gnetId: 15489
-        revision: 2
-        datasource: prometheus
-      prometheus-benchmark:
-        gnetId: 15490
-        revision: 2
-        datasource: prometheus
-      multicluster:
-        gnetId: 15488
-        revision: 3
-        datasource: prometheus
-
+  enabled: true
+  grafana.ini:
+    users:
+      viewers_can_edit: true
+    auth:
+      disable_login_form: true
+      disable_signout_menu: true
+    auth.anonymous:
+      enabled: true
+      org_role: Viewer
   dashboardProviders:
     dashboardproviders.yaml:
       apiVersion: 1
       providers:
-      - name: 'linkerd'
-        orgId: 1
-        folder: 'Linkerd'
-        type: file
-        disableDeletion: false
+      - disableDeletion: false
         editable: true
+        folder: Linkerd
+        name: linkerd
         options:
           path: /var/lib/grafana/dashboards/default
+        orgId: 1
+        type: file
+  dashboards:
+    linkerd:
+      authority:
+        datasource: prometheus
+        gnetId: 15482
+        revision: 3
+      cronjob:
+        datasource: prometheus
+        gnetId: 15483
+        revision: 3
+      daemonset:
+        datasource: prometheus
+        gnetId: 15484
+        revision: 3
+      deployment:
+        datasource: prometheus
+        gnetId: 15475
+        revision: 7
+      health:
+        datasource: prometheus
+        gnetId: 15486
+        revision: 3
+      job:
+        datasource: prometheus
+        gnetId: 15487
+        revision: 3
+      kubernetes:
+        datasource: prometheus
+        gnetId: 15479
+        revision: 2
+      multicluster:
+        datasource: prometheus
+        gnetId: 15488
+        revision: 3
+      namespace:
+        datasource: prometheus
+        gnetId: 15478
+        revision: 3
+      pod:
+        datasource: prometheus
+        gnetId: 15477
+        revision: 3
+      prometheus:
+        datasource: prometheus
+        gnetId: 15489
+        revision: 2
+      prometheus-benchmark:
+        datasource: prometheus
+        gnetId: 15490
+        revision: 2
+      replicaset:
+        datasource: prometheus
+        gnetId: 15491
+        revision: 3
+      replicationcontroller:
+        datasource: prometheus
+        gnetId: 15492
+        revision: 4
+      route:
+        datasource: prometheus
+        gnetId: 15481
+        revision: 3
+      service:
+        datasource: prometheus
+        gnetId: 15480
+        revision: 3
+      statefulset:
+        datasource: prometheus
+        gnetId: 15493
+        revision: 3
+      top-line:
+        datasource: prometheus
+        gnetId: 15474
+        revision: 4
