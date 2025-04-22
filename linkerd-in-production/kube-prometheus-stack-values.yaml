@@ -10,8 +10,13 @@ prometheus:
       name: additional-prometheus-scrape-configs
 
 # The grafana: stanza contains additional configuration for Grafana. Here
-# we're using it to supply some preconfigured Linkerd dashboards.
+# we're using it both to avoid using a curl image on DockerHub (since rate
+# image-pull rate limits cause problems for the lab) and to supply some
+# preconfigured Linkerd dashboards.
 grafana:
+  downloadDashboardsImage:
+    registry: quay.io/curl
+    repository: curl
   enabled: true
   grafana.ini:
     users:
